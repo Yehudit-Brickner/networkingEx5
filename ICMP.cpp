@@ -286,7 +286,7 @@ int main (){
     
     int sock = -1;
   
-    // if ((sock = socket (AF_INET, SOCK_RAW, IPPROTO_RAW)) == -1) 
+    // if ((sock = socket (AF_INET, SOCK_RAW, IPPROTO_RAW)) == -1) {
     if ((sock = socket (AF_INET, SOCK_RAW, IPPROTO_ICMP)) == -1){
         fprintf (stderr, "socket() failed with error: %d"
 #if defined _WIN32
@@ -344,47 +344,57 @@ int main (){
     printf("Msg\n");
     int num=0;
     socklen_t lenght=sizeof(dest_in);
-    if (num=recvfrom(sock, &packet, sizeof(packet), 0, (struct sockaddr *) &dest_in, &lenght)){
+    if (num=recvfrom(sock, &packet, sizeof(packet), 0, (struct sockaddr *) &dest_in, &lenght))
         printf("***Got message!***\n");
-    }
-    struct ip  *myheader=(struct ip  *)packet;
-    printf("\nip header data\n");
-    printf("version of ip: %d\n",(myheader->ip_v));
-    printf("length of header: %d\n",(myheader->ip_hl));
-    printf("type of service: %d\n",(myheader->ip_tos));
-    printf("length of the whole packet: %d\n",(myheader->ip_len));
-    printf("unique identifier of the packet: %d\n",(myheader->ip_id));
-    printf("fragmantation flags: %d\n",(myheader->ip_off));
-    printf("time to live: %d\n",(myheader->ip_ttl));
-    printf("protocol: %d\n",(myheader->ip_p));
-    printf("checksum: %d\n",(myheader->ip_sum));
-    printf("ip source: %s\n",inet_ntoa(myheader->ip_src));
-    printf("ip destionation: %s\n",inet_ntoa(myheader->ip_dst));
     
-    struct icmp *myicmpheader=(struct icmp *)packet+IP4_HDRLEN-1;
-    printf("\nicmp header data\n");
-    printf("type: %d\n",(myicmpheader->icmp_type));
-    printf("code: %d\n",(myicmpheader->icmp_code));
-    printf("checksum: %d\n",(myicmpheader->icmp_cksum));
-    printf("id: %d\n",(myicmpheader->icmp_id));
-    printf("sequence: %d\n",(myicmpheader->icmp_seq));
-    printf("data: %s\n",(myicmpheader->icmp_data));
+        struct ip  *myheader=(struct ip  *)packet;
+        printf("\nip header data\n");
+        printf("version of ip: %d\n",(myheader->ip_v));
+        printf("length of header: %d\n",(myheader->ip_hl));
+        printf("type of service: %d\n",(myheader->ip_tos));
+        printf("length of the whole packet: %d\n",(myheader->ip_len));
+        printf("unique identifier of the packet: %d\n",(myheader->ip_id));
+        printf("fragmantation flags: %d\n",(myheader->ip_off));
+        printf("time to live: %d\n",(myheader->ip_ttl));
+        printf("protocol: %d\n",(myheader->ip_p));
+        printf("checksum: %d\n",(myheader->ip_sum));
+        printf("ip source: %s\n",inet_ntoa(myheader->ip_src));
+        printf("ip destionation: %s\n",inet_ntoa(myheader->ip_dst));
     
-    // printf ("packet data\n");// spot+=ICMP_HDRLEN;
-    printf ("packet data\n");
-    char d[ datalen];
-    int startp=IP4_HDRLEN + ICMP_HDRLEN-1;
-    int endp=IP4_HDRLEN + ICMP_HDRLEN + datalen;
-    for( int i=startp;i<endp;i++){
-        d[i-startp] = packet[i];
-    }
-    printf("%s",d);
-
+        struct icmp *myicmpheader=(struct icmp *)packet+IP4_HDRLEN-1;
+        printf("\nicmp header data\n");
+        printf("type: %d\n",(myicmpheader->icmp_type));
+        printf("code: %d\n",(myicmpheader->icmp_code));
+        printf("checksum: %d\n",(myicmpheader->icmp_cksum));
+        printf("id: %d\n",(myicmpheader->icmp_id));
+        printf("sequence: %d\n",(myicmpheader->icmp_seq));
+        printf("data: %ld\n",(myicmpheader->icmp_data));
+    
+        // printf ("packet data\n");// spot+=ICMP_HDRLEN;
+        printf ("\npacket data\n");
+        // char da[ datalen];
+        int startp=IP4_HDRLEN + ICMP_HDRLEN-1;
+        int endp=IP4_HDRLEN + ICMP_HDRLEN + datalen;
+        for( int i=startp;i<endp;i++){
+            // da[i-startp] = packet[i];
+            printf("%c",packet[i]);
+        }
+        printf("\n");
+     
+        
+       
+    
+    // else{
+    //     printf("problem");
+    // }
+   
     end=clock();
-    diff =(end-start)/10.0;
+    diff =(end-start);
+    printf("%ld\n",diff);
     // printf("time after sendto %ld \n" ,end);
-    printf("\ntime diff is %ld milli seconds\n", diff);
-    printf("\ntime diff is %ld micro secounds\n",diff*1000);
+    printf("\ntime diff is %f milli seconds\n", diff/10000.0);
+    printf("\ntime diff is %f micro seconds\n", diff/10.0);
+
 
 
 
