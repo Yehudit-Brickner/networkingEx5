@@ -83,8 +83,8 @@ int gettimeofday(struct timeval * tp, struct timezone * tzp)
 #include <string.h>
 
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <sys/socket.h> 
+#include <netinet/in.h> 
 #include <netinet/ip.h>
 #include <netinet/ip_icmp.h>
 #include <arpa/inet.h>
@@ -120,7 +120,7 @@ unsigned short calculate_checksum(unsigned short * paddress, int len);
 // 4. For debugging and development, run MS Visual Studio (MSVS) as admin by
 //    right-clicking at the icon of MSVS and selecting from the right-click 
 //    menu "Run as administrator"
-//
+// myheader_to_send->ip_dst=DESTINATION_IP;
 //  Note. You can place another IP-source address that does not belong to your
 //  computer (IP-spoofing), i.e. just another IP from your subnet, and the ICMP
 //  still be sent, but do not expect to see ICMP_ECHO_REPLY in most such cases
@@ -197,7 +197,7 @@ int main (){
 			, errno
 #endif
 			);
-        return -1;
+        return -1; 
     }
  
    // Destination IPv
@@ -282,8 +282,11 @@ int main (){
     // Create raw socket for IP-RAW (make IP-header by yourself)
     
 
+ 
 
-    
+   
+
+
     int sock = -1;
   
     // if ((sock = socket (AF_INET, SOCK_RAW, IPPROTO_RAW)) == -1) {
@@ -320,7 +323,7 @@ int main (){
         return -1;
     }
 
-    // Send the packet using sendto() for acket[i]%d'sending datagrams.
+    // Send the packet using sendto() for sending datagrams.
     clock_t start, end, diff;
     start = clock();
    
@@ -344,7 +347,7 @@ int main (){
     printf("Msg\n");
     int num=0;
     socklen_t lenght=sizeof(dest_in);
-    if (num=recvfrom(sock, &packet, sizeof(packet), 0, (struct sockaddr *) &dest_in, &lenght))
+    if (recvfrom(sock, &packet, sizeof(packet), 0, (struct sockaddr *) &dest_in, &lenght))
         printf("***Got message!***\n");
     
         struct ip  *myheader=(struct ip  *)packet;
@@ -366,7 +369,7 @@ int main (){
         printf("type: %d\n",(myicmpheader->icmp_type));
         printf("code: %d\n",(myicmpheader->icmp_code));
         printf("checksum: %d\n",(myicmpheader->icmp_cksum));
-        printf("id: %d\n",(myicmpheader->icmp_id));
+        printf("id: %ld\n",(myicmpheader->icmp_id));
         printf("sequence: %d\n",(myicmpheader->icmp_seq));
         printf("data: %ld\n",(myicmpheader->icmp_data));
     
@@ -384,10 +387,7 @@ int main (){
         
        
     
-    // else{
-    //     printf("problem");
-    // }
-   
+    
     end=clock();
     diff =(end-start);
     printf("%ld\n",diff);
