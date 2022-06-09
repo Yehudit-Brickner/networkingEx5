@@ -6,10 +6,12 @@
 #include <netinet/ip_icmp.h> // icmp headder declaration.
 #include <string.h>
 #include <arpa/inet.h>
+ // printf("time before sendto %ld \n"  ,start);
+    
 
 
-
-
+ // printf("time before sendto %ld \n"  ,start);
+    
 
 
 int main(){
@@ -75,7 +77,7 @@ int main(){
                     printf("DST ip : %s\n",inet_ntoa(dst.sin_addr)); // convert back
                     int type=icmph->type;
                     if (type==0){
-                        printf("type : %d echo (ping) reply\n",type);
+                        printf("type : %d echo (pin) reply\n",type);
                     }
                     else if(type==8){
                         printf("type : %d echo (ping) request\n",type);

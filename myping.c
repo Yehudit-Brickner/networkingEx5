@@ -204,10 +204,10 @@ int main (){
     }
 
     // Send the packet using sendto() for sending datagrams.
+    // starting the clock
     clock_t start, end, diff;
     start = clock();
-    // printf("time before sendto %ld \n"  ,start);
-    
+   
     int packet_size;
     packet_size=sendto (sock, packet, ICMP_HDRLEN + datalen, 0, (struct sockaddr *) &dest_in, sizeof (dest_in));
     if (packet_size==-1){
@@ -218,18 +218,18 @@ int main (){
     printf("Size: %d bytes: ICMP header(%d) + data(%d)\n", packet_size, ICMP_HDRLEN, datalen);
     printf("Data sent: %s \n", packet + ICMP_HDRLEN);
 
-    // int num=0;
-    // bzero(&packet,sizeof(packet));
     socklen_t len = sizeof(dest_in);
     int recieve_size=-1;
+    // making sure we recieved a packet 
     recieve_size=recvfrom(sock, &packet, sizeof(packet), 0, (struct sockaddr *) &dest_in, &len);
     if (recieve_size>0){
+        //printing all the packet data
         printf("Msg recieved\n");
         printf("packet size: %d bytes: IP header(%d) + ICMP header(%d) + data(%d)\n", recieve_size, IP4_HDRLEN, ICMP_HDRLEN,datalen);
         printf("Data: %s \n", packet + IP4_HDRLEN+ICMP_HDRLEN);
     
         struct ip  *myheader=(struct ip  *)packet;
-        printf("\nip header data\n");
+        printf("ip header data\n");
         printf("version of ip: %d\n",(myheader->ip_v));
         printf("length of header: %d\n",(myheader->ip_hl));
         printf("type of service: %d\n",(myheader->ip_tos));
@@ -251,21 +251,19 @@ int main (){
         printf("sequence: %d\n",(myicmpheader->icmp_seq));
         printf("icmp data: %ld\n",(myicmpheader->icmp_data));
     
-        
         printf ("\npacket data\n");
         int startp= IP4_HDRLEN+ ICMP_HDRLEN;
         int endp= IP4_HDRLEN+ICMP_HDRLEN + datalen;
         for( int i=startp;i<endp;i++){
             printf("%c",packet[i]);
-        }
-        printf("\n");
+        }        
     }
+    //ending the clock
     end=clock();
     diff =(end-start);
-    // printf("%ld\n",diff);
-    // printf("time after sendto %ld \n" ,end);
-    printf("\ntime diff is %f milli seconds\n", diff/10000.0);
-    printf("\ntime diff is %f micro seconds\n", diff/10.0);
+    printf("\ntime diff is %f milli seconds\n", diff/10.0);
+    printf("\ntime diff is %f micro seconds\n", diff*100.0);
+    // cosig the socket
     close(sock);
 
     return 0;
