@@ -6,12 +6,6 @@
 #include <netinet/ip_icmp.h> // icmp headder declaration.
 #include <string.h>
 #include <arpa/inet.h>
- // printf("time before sendto %ld \n"  ,start);
-    
-
-
- // printf("time before sendto %ld \n"  ,start);
-    
 
 
 int main(){
@@ -24,7 +18,7 @@ int main(){
     struct sockaddr_in dst;
     int count=0;
     //creating raw socket:
-    //the third paramter enables the socket to read full packet content
+    //the third paramter enables the socket to accept all packets that were sent over all protocals
     raw_socket = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
     if(raw_socket < 0){
         printf("Error creating socket\n");
@@ -90,8 +84,6 @@ int main(){
                     // printf("sequence : %d\n",(icmph->un.echo.sequence));
                     // printf("ICMP_seq: %d/%d\n",icmph->un.echo.sequence>>8, icmph->un.echo.sequence);
 
-
-
                     // printf ("\npacket data\n");
                     // int startp= sizeof(struct ethhdr)+sizeof(struct iphdr)+sizeof(struct icmphdr);
                     // int endp= data_size;
@@ -101,13 +93,10 @@ int main(){
                     // printf("\n");
 
                     count++;
-
-            
                 }
             }   
         }
     }
     close(raw_socket);
     return 0;    
-
 }
