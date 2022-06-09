@@ -224,7 +224,7 @@ int main (){
     int recieve_size=-1;
     recieve_size=recvfrom(sock, &packet, sizeof(packet), 0, (struct sockaddr *) &dest_in, &len);
     if (recieve_size>0){
-        printf("Msg #%d recieved\n");
+        printf("Msg recieved\n");
         printf("packet size: %d bytes: IP header(%d) + ICMP header(%d) + data(%d)\n", recieve_size, IP4_HDRLEN, ICMP_HDRLEN,datalen);
         printf("Data: %s \n", packet + IP4_HDRLEN+ICMP_HDRLEN);
     
